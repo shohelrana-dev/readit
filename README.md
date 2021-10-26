@@ -1,4 +1,4 @@
-# Awesome Project Build with TypeORM
+# Readit Build with Typescript, TypeORM, NextJs, TailwindCSS
 
 Steps to run this project:
 

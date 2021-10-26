@@ -1,11 +1,11 @@
 {
    "compilerOptions": {
       // https://www.typescriptlang.org/tsconfig
-      "lib": ["es5", "es6"],
-      "target": "es5",
+      //"lib": ["es5", "es6"],
+      "target": "es6",
       "module": "commonjs",
       "moduleResolution": "node",
-      "outDir": "./build",
+      "outDir": "./dist",
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "sourceMap": true,
@@ -26,5 +26,9 @@
       "noImplicitReturns": true,
       "noFallthroughCasesInSwitch": true,
       "resolveJsonModule": true
-   }
+   },
+   "exclude": [
+      "node_modules",
+      "client"
+   ]
 }

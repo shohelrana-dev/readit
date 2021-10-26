@@ -1,6 +1,6 @@
 //dependencies
 import 'reflect-metadata';
-import express from 'express';
+import express, {Application} from 'express';
 import morgan from 'morgan';
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
@@ -17,8 +17,10 @@ import subsRoutes from '../api/routes/subs-routes';
 import votesRoutes from '../api/routes/votes-routes';
 import currentUser from "../api/middlware/current-user";
 
+//Application
+const app: Application = express();
+
 //config
-const app = express();
 dotenv.config();
 app.use(morgan('dev'));
 app.use(express.json());

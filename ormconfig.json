@@ -8,19 +8,23 @@
   "synchronize": false,
   "logging": true,
   "entities": [
-    "src/api/entities/**/*.ts"
+    "src/api/entities/**/*.ts",
+    "api/entities/**/*.js"
   ],
   "migrations": [
-    "src/api/migration/**/*.ts"
+    "src/api/migration/**/*.ts",
+    "api/migration/**/*.js"
   ],
   "subscribers": [
-    "src/api/subscriber/**/*.ts"
+    "src/api/subscriber/**/*.ts",
+    "api/subscriber/**/*.js"
   ],
   "seeds": [
-    "src/api/seeds/**/*{.ts,.js}"
+    "src/seeds/**/*.ts",
+    "api/seeds/**/*.js"
   ],
   "cli": {
-    "entitiesDir": "src/api/entity",
+    "entitiesDir": "src/api/entities",
     "migrationsDir": "src/api/migration",
     "subscribersDir": "src/api/subscriber"
   }
