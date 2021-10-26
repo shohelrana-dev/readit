@@ -130,7 +130,8 @@ export default function PostPage() {
                                                 className={classNames('fas fa-arrow-alt-circle-up', {
                                                     'text-red-500': post.userVote === 1,
                                                 })}
-                                            ></i>
+                                            >
+                                            </i>
                                         </div>
                                         <p className="text-xs font-bold">{post.voteScore}</p>
                                         {/* Downvote */}
@@ -237,7 +238,7 @@ export default function PostPage() {
                                 </div>
                                 <hr/>
                                 {/* Comments feed */}
-                                {comments?.map((comment) => (
+                                {comments?.map((comment: Comment) => (
                                     <div className="flex" key={comment.identifier}>
                                         {/* Vote section */}
                                         <div className="flex-shrink-0 w-10 py-2 text-center rounded-l">

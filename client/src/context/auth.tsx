@@ -2,6 +2,7 @@ import React, {createContext, useContext, useEffect, useReducer} from "react"
 import {User} from "../utils/types"
 import axios from "axios";
 import api from "../utils/api-endpoints";
+import {Callback} from "escalade";
 
 
 interface State {
@@ -53,24 +54,27 @@ const reducer = (state: State, {type, payload}: Action) => {
 }
 
 export const AuthProvider = ({children}: { children: React.ReactNode }) => {
-    const [state, defaultDispatch]: any = useReducer(reducer, {
+    const [state, defaultDispatch] = useReducer(reducer, {
         currentUser: null,
         authenticated: false,
         loading: true
     });
 
-    const dispatch = (type: string, payload?: any) => defaultDispatch({type, payload})
+    const dispatch: any = (type: string, payload?: any) => defaultDispatch({type, payload})
 
-    // @ts-ignore
-    useEffect(async () => {
-        try {
-            const {data} = await axios.get(api.me);
-            dispatch('LOGIN', data)
-        } catch (err) {
-            console.log(err)
-        } finally {
-            dispatch('LOADING', false)
+    useEffect(() => {
+        async function loadCurrentUser() {
+            try {
+                const {data} = await axios.get(api.me);
+                dispatch('LOGIN', data)
+            } catch (err) {
+                console.log(err)
+            } finally {
+                dispatch('LOADING', false)
+            }
         }
+
+        loadCurrentUser()
     }, [])
 
     return (

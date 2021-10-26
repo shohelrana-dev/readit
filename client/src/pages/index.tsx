@@ -28,6 +28,7 @@ const Home: NextPage = () => {
 
         if (id !== observePost) {
             setObservePost(id)
+            // @ts-ignore
             observeElement(document.getElementById(id))
         }
     }, [posts])
@@ -48,8 +49,7 @@ const Home: NextPage = () => {
     return (
         <div className="pt-12">
             <Head>
-                <title>Readit: The front page of the internet</title>
-                <link rel="icon" href="/favicon.ico"/>
+                <title>readit: the front page of the readit</title>
             </Head>
 
             <div className="container flex pt-4 justify-center">

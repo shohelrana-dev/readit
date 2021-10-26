@@ -104,7 +104,7 @@ export default function create() {
     )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
+export const getServerSideProps: GetServerSideProps = async ({req, res}): Promise<any> => {
     try {
         const cookie = req.headers.cookie
         if (!cookie) throw new Error('Missing auth token cookie')

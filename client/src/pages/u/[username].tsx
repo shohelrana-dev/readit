@@ -48,13 +48,13 @@ export default function user() {
                                                 <span> commented on </span>
                                                 <Link href={postUrl}>
                                                     <a className="font-semibold cursor-pointer hover:underline">
-                                                        {comment.post.title}
+                                                        {comment.post?.title}
                                                     </a>
                                                 </Link>
                                                 <span className="mx-1">•</span>
-                                                <Link href={`/r/${comment.post.subName}`}>
+                                                <Link href={`/r/${comment.post?.subName}`}>
                                                     <a className="text-black cursor-pointer hover:underline">
-                                                        /r/{comment.post.subName}
+                                                        /r/{comment.post?.subName}
                                                     </a>
                                                 </Link>
                                             </p>
@@ -90,7 +90,7 @@ export default function user() {
     )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
+export const getServerSideProps: GetServerSideProps = async ({req, res}): Promise<any> => {
     try {
         const cookie = req.headers.cookie
         if (!cookie) throw new Error('Missing auth token cookie')
