@@ -2,25 +2,25 @@ import {check} from "express-validator";
 import User from "../entities/User";
 import bcrypt from "bcrypt";
 
-class UsersValidator {
+class UsersValidation {
 
-    signup(): any {
+    public signup(): any[] {
         return [
             check('username').trim().isLength({min: 1}).withMessage('Username field is required!')
-                .custom(UsersValidator.checkUsernameNotExists),
+                .custom(UsersValidation.checkUsernameNotExists),
             check('email').trim().isLength({min: 1}).withMessage('Email field is required!')
-                .isEmail().withMessage('Email address is not valid').custom(UsersValidator.checkEmailNotExists),
+                .isEmail().withMessage('Email address is not valid').custom(UsersValidation.checkEmailNotExists),
             check('password').trim().isLength({min: 1}).withMessage('Password field is required!')
                 .isLength({min: 4}).withMessage('Password should be min 4 characters!'),
         ]
     }
 
-    login(): any {
+    public login(): any[] {
         return [
             check('username').trim().isLength({min: 1}).withMessage('Username field is required!')
-                .custom(UsersValidator.checkUsernameExists),
+                .custom(UsersValidation.checkUsernameExists),
             check('password').trim().isLength({min: 1}).withMessage('Password field is required!')
-                .custom(UsersValidator.checkValidPassword),
+                .custom(UsersValidation.checkValidPassword),
         ];
     }
 
@@ -58,4 +58,4 @@ class UsersValidator {
     }
 }
 
-export default new UsersValidator();
+export default new UsersValidation();

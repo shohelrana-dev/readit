@@ -2,12 +2,12 @@ import {check} from "express-validator";
 import {getRepository} from "typeorm";
 import Sub from "../entities/Sub";
 
-class SubsValidator {
+class SubsValidation {
 
     create(): any {
         return [
             check('name').trim().isLength({min: 1}).withMessage('Name is not be empty!')
-                .custom(SubsValidator.checkSubNotExists),
+                .custom(SubsValidation.checkSubNotExists),
             check('title').trim().isLength({min: 1}).withMessage('Title is not be empty!'),
         ]
     }
@@ -20,4 +20,4 @@ class SubsValidator {
     }
 }
 
-export default new SubsValidator();
+export default new SubsValidation();

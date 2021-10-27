@@ -32,7 +32,7 @@ class SubsController {
         } catch (err) {
             console.log(err.message)
             return res.status(500).json({
-                error: true,
+                success:false,
                 message: 'Something went wrong!'
             });
         }
@@ -64,7 +64,7 @@ class SubsController {
         } catch (err) {
             console.log(err.message)
             return res.status(500).json({
-                error: true,
+                success:false,
                 message: 'Something went wrong!'
             });
         }
@@ -80,7 +80,7 @@ class SubsController {
             //check own sub
             if (sub.username !== res.locals.currentUser.username) {
                 return res.status(403).json({
-                    error: true,
+                    success:false,
                     message: 'You dont own this sub'
                 })
             }
@@ -89,7 +89,7 @@ class SubsController {
             //check file type
             if (type !== 'image' && type !== 'banner') {
                 return res.status(400).json({
-                    error: true,
+                    success:false,
                     message: 'Invalid file type'
                 });
             }
@@ -114,7 +114,7 @@ class SubsController {
         } catch (err) {
             console.log(err)
             return res.status(500).json({
-                error: true,
+                success:false,
                 message: 'Something went wrong'
             })
         }

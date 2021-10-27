@@ -1,14 +1,14 @@
 import {Router} from 'express';
 import checkAuth from "../middlware/check-auth";
 import PostsController from "../controllers/posts-controller";
-import validator from "../validators/posts-validator";
+import validation from "../validations/posts-validation";
 
 
 //router instance
 const router = Router();
 
 //posts routes
-router.post('/', checkAuth, validator.create(), PostsController.create);
+router.post('/', checkAuth, validation.create(), PostsController.create);
 
 router.get('/', PostsController.getPosts);
 

@@ -1,8 +1,6 @@
 import {Request, Response} from "express";
 import {validationResult} from "express-validator";
-import Post from "../entities/Post";
-import Sub from "../entities/Sub";
-import Comment from "../entities/Comment";
+import PostsService from "../services/posts-service";
 
 class PostsController {
 
@@ -10,29 +8,13 @@ class PostsController {
         const currentPage = (req.query.page || 0) as number;
         const postsPerPage = (req.query.count || 8) as number;
         try {
-            const posts = await Post.find({
-                relations: ['votes', 'sub'],
-                order: {createdAt: 'DESC'},
-                skip: currentPage * postsPerPage,
-                take: postsPerPage
-            });
-
-            if (res.locals.currentUser) {
-                posts.forEach((post) => {
-                    post.setUserVote(res.locals.currentUser)
-                })
-            }
-
-            posts.forEach(post => {
-                post.sub.setImageUrl()
-            })
+            const posts = await PostsService.getPosts(currentPage, postsPerPage, res.locals.currentUser);
 
             return res.json(posts);
         } catch (err) {
-            console.log(err.message);
             return res.status(500).json({
-                error: true,
-                message: 'Something went wrong!'
+                success: false,
+                message: err.message
             });
         }
     }
@@ -40,22 +22,13 @@ class PostsController {
     public async getPost(req: Request, res: Response): Promise<Response> {
         const {identifier, slug} = req.params;
         try {
-            const post = await Post.findOneOrFail({identifier, slug}, {
-                relations: ['sub', 'votes']
-            })
-
-            if (res.locals.currentUser) {
-                post.setUserVote(res.locals.currentUser);
-            }
-
-            post.sub.setImageUrl()
+            const post = await PostsService.getPost({identifier, slug}, res.locals.currentUser);
 
             return res.json(post);
         } catch (err) {
-            console.log(err.message);
             return res.status(404).json({
-                error: true,
-                message: 'Post not found!'
+                success: false,
+                message: err.message
             });
         }
     }
@@ -68,13 +41,9 @@ class PostsController {
         }
 
         const {title, body, sub} = req.body;
-        const user = res.locals.user;
 
         try {
-            const subRecord = await Sub.findOneOrFail({name: sub});
-
-            const post = Post.create({title, body, user, subName: sub, sub: subRecord});
-            await post.save();
+            const post = await PostsService.create({title, body, sub, currentUser: res.locals.currentUser});
 
             //return success response
             return res.status(201).json({
@@ -83,27 +52,20 @@ class PostsController {
                 post: post
             });
         } catch (err) {
-            console.log(err.message)
             return res.status(500).json({
-                error: true,
-                message: 'Something went wrong!'
+                success: false,
+                message: err.message
             });
         }
     }
 
-    public async commentOnPost(req: Request, res: Response) {
-        const {identifier, slug} = req.params
+    public async commentOnPost(req: Request, res: Response): Promise<Response> {
+        const {identifier, slug} = req.params;
+        const {body} = req.body;
+        const user = res.locals.currentUser;
 
         try {
-            const post = await Post.findOneOrFail({identifier, slug})
-
-            const comment = new Comment({
-                body: req.body.body,
-                user: res.locals.user,
-                post,
-            });
-
-            await comment.save();
+            const comment = await PostsService.commentOnPost({identifier, slug}, {body, user});
 
             return res.json({
                 success: true,
@@ -111,34 +73,24 @@ class PostsController {
                 comment
             })
         } catch (err) {
-            console.log(err.message)
-            return res.status(404).json({error: 'Post not found'})
+            return res.status(500).json({
+                success: false,
+                message: err.message
+            })
         }
     }
 
-    public async getPostComments(req: Request, res: Response) {
+    public async getPostComments(req: Request, res: Response): Promise<Response> {
         const {identifier, slug} = req.params
         try {
-            const post = await Post.findOneOrFail({identifier, slug})
-
-            const comments = await Comment.find({
-                where: {post},
-                order: {createdAt: 'DESC'},
-                relations: ['votes'],
-            })
-
-            comments.forEach(c => {
-                c.setVoteScore()
-            })
-
-            if (res.locals.currentUser) {
-                comments.forEach((c) => c.setUserVote(res.locals.currentUser))
-            }
+            const comments = await PostsService.getPostComments(identifier, slug, res.locals.currentUser);
 
             return res.json(comments)
         } catch (err) {
-            console.log(err)
-            return res.status(500).json({error: 'Something went wrong'})
+            return res.status(500).json({
+                success: false,
+                message: err.message
+            })
         }
     }
 }

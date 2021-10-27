@@ -33,7 +33,7 @@ class UsersController {
         } catch (err) {
             console.log(err)
             return res.status(500).json({
-                error: true,
+                success:false,
                 message: 'Something went wrong!'
             });
         }
@@ -73,7 +73,7 @@ class UsersController {
         } catch (err) {
             console.log(err.message)
             return res.status(500).json({
-                error: true,
+                success:false,
                 message: 'Something went wrong!'
             });
         }

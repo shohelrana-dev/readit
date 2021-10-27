@@ -16,6 +16,7 @@ import postsRoutes from '../api/routes/posts-routes';
 import subsRoutes from '../api/routes/subs-routes';
 import votesRoutes from '../api/routes/votes-routes';
 import currentUser from "../api/middlware/current-user";
+import notFound from "../api/middlware/not-found";
 
 //Application
 const app: Application = express();
@@ -40,5 +41,8 @@ app.use('/api/v1/users', currentUser, usersRoutes);
 app.use('/api/v1/posts', currentUser, postsRoutes);
 app.use('/api/v1/subs', currentUser, subsRoutes);
 app.use('/api/v1/votes', currentUser, votesRoutes);
+
+// handle 404 not found error
+app.use(notFound);
 
 export default app;
