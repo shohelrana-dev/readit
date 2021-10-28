@@ -103,4 +103,4 @@ class PostsService {
     }
 }
 
-export default new PostsService();
+export default PostsService;

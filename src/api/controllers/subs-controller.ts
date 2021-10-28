@@ -9,7 +9,7 @@ import {getConnection, getRepository} from "typeorm";
 
 class SubsController {
 
-    public async create(req: Request, res: Response): Promise<Response> {
+    public create = async (req: Request, res: Response): Promise<Response> => {
         //check errors
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -32,13 +32,13 @@ class SubsController {
         } catch (err) {
             console.log(err.message)
             return res.status(500).json({
-                success:false,
+                success: false,
                 message: 'Something went wrong!'
             });
         }
     }
 
-    public async getSub(req: Request, res: Response): Promise<Response> {
+    public getSub = async (req: Request, res: Response): Promise<Response> => {
         try {
             const {name} = req.params;
 
@@ -64,13 +64,13 @@ class SubsController {
         } catch (err) {
             console.log(err.message)
             return res.status(500).json({
-                success:false,
+                success: false,
                 message: 'Something went wrong!'
             });
         }
     }
 
-    public async uploadSubImage(req: Request, res: Response) {
+    public uploadSubImage = async (req: Request, res: Response): Promise<Response> => {
         try {
             // @ts-ignore
             const file: any = req.files.file;
@@ -80,7 +80,7 @@ class SubsController {
             //check own sub
             if (sub.username !== res.locals.currentUser.username) {
                 return res.status(403).json({
-                    success:false,
+                    success: false,
                     message: 'You dont own this sub'
                 })
             }
@@ -89,7 +89,7 @@ class SubsController {
             //check file type
             if (type !== 'image' && type !== 'banner') {
                 return res.status(400).json({
-                    success:false,
+                    success: false,
                     message: 'Invalid file type'
                 });
             }
@@ -106,7 +106,7 @@ class SubsController {
             }
 
             //upload file
-            SubsController.upload(file, filename, oldFileName);
+            this.upload(file, filename, oldFileName);
 
             await sub.save()
 
@@ -114,13 +114,13 @@ class SubsController {
         } catch (err) {
             console.log(err)
             return res.status(500).json({
-                success:false,
+                success: false,
                 message: 'Something went wrong'
             })
         }
     }
 
-    private static upload(file: any, filename: string, oldFileName: string): void {
+    private upload(file: any, filename: string, oldFileName: string): void {
         let uploadDir: string = path.join(__dirname, '/../../../public/images/');
 
         file.mv(uploadDir + filename, (err: any) => {
@@ -136,7 +136,7 @@ class SubsController {
         })
     }
 
-    public async topSubs(_: Request, res: Response) {
+    public topSubs = async (_: Request, res: Response): Promise<Response> => {
         try {
             /**
              * SELECT s.title, s.name,
@@ -168,7 +168,7 @@ class SubsController {
         }
     }
 
-    public async searchSubs(req: Request, res: Response) {
+    public searchSubs = async (req: Request, res: Response): Promise<Response> => {
         try {
             const name = req.params.name
 

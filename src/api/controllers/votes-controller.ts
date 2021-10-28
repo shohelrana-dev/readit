@@ -6,7 +6,7 @@ import Post from "../entities/Post";
 
 class VotesController {
 
-    public async create(req: Request, res: Response): Promise<Response> {
+    public create = async (req: Request, res: Response): Promise<Response> => {
         const {identifier, slug, commentIdentifier, value} = req.body
 
         // Validate vote value
@@ -62,7 +62,7 @@ class VotesController {
         } catch (err) {
             console.log(err.message)
             return res.status(500).json({
-                success:false,
+                success: false,
                 message: 'Something went wrong'
             })
         }

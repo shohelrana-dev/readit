@@ -9,7 +9,7 @@ import Post from "../entities/Post";
 
 class UsersController {
 
-    public async signup(req: Request, res: Response): Promise<Response> {
+    public signup = async (req: Request, res: Response): Promise<Response> => {
         try {
             let {email, username, password} = req.body;
 
@@ -33,13 +33,13 @@ class UsersController {
         } catch (err) {
             console.log(err)
             return res.status(500).json({
-                success:false,
+                success: false,
                 message: 'Something went wrong!'
             });
         }
     }
 
-    public async login(req: Request, res: Response): Promise<Response> {
+    public login = async (req: Request, res: Response): Promise<Response> => {
         try {
             let {username} = req.body;
 
@@ -73,17 +73,17 @@ class UsersController {
         } catch (err) {
             console.log(err.message)
             return res.status(500).json({
-                success:false,
+                success: false,
                 message: 'Something went wrong!'
             });
         }
     }
 
-    public async me(_: Request, res: Response) {
+    public me = async (_: Request, res: Response): Promise<Response> => {
         return res.json(res.locals.user);
     }
 
-    public async logout(_: Request, res: Response) {
+    public logout = async (_: Request, res: Response): Promise<Response> => {
         res.set('Set-Cookie', cookie.serialize('token', '', {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
@@ -95,7 +95,7 @@ class UsersController {
         return res.json({success: true, message: 'Logout successfully'});
     }
 
-    public async getUserSubmissions(req: Request, res: Response) {
+    public getUserSubmissions = async (req: Request, res: Response): Promise<Response> => {
         try {
             const user = await User.findOneOrFail({
                 where: {username: req.params.username},

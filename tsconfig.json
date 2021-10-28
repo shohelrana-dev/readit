@@ -1,8 +1,8 @@
 {
    "compilerOptions": {
       // https://www.typescriptlang.org/tsconfig
-      //"lib": ["es5", "es6"],
-      "target": "es6",
+      "lib": ["es2017"],
+      "target": "es2017",
       "module": "commonjs",
       "moduleResolution": "node",
       "outDir": "./dist",
@@ -27,6 +27,7 @@
       "noFallthroughCasesInSwitch": true,
       "resolveJsonModule": true
    },
+   "include": ["src/**/*.ts", "src/**/*.json", ".env"],
    "exclude": [
       "node_modules",
       "client"

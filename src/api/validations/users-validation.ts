@@ -4,48 +4,48 @@ import bcrypt from "bcrypt";
 
 class UsersValidation {
 
-    public signup(): any[] {
+    public signup = (): any[] => {
         return [
             check('username').trim().isLength({min: 1}).withMessage('Username field is required!')
-                .custom(UsersValidation.checkUsernameNotExists),
+                .custom(this.checkUsernameNotExists),
             check('email').trim().isLength({min: 1}).withMessage('Email field is required!')
-                .isEmail().withMessage('Email address is not valid').custom(UsersValidation.checkEmailNotExists),
+                .isEmail().withMessage('Email address is not valid').custom(this.checkEmailNotExists),
             check('password').trim().isLength({min: 1}).withMessage('Password field is required!')
                 .isLength({min: 4}).withMessage('Password should be min 4 characters!'),
         ]
     }
 
-    public login(): any[] {
+    public login = (): any[] => {
         return [
             check('username').trim().isLength({min: 1}).withMessage('Username field is required!')
-                .custom(UsersValidation.checkUsernameExists),
+                .custom(this.checkUsernameExists),
             check('password').trim().isLength({min: 1}).withMessage('Password field is required!')
-                .custom(UsersValidation.checkValidPassword),
+                .custom(this.checkValidPassword),
         ];
     }
 
-    private static async checkUsernameNotExists(username: string) {
+    private checkUsernameNotExists = async (username: string) => {
         let user = await User.findOne({username});
         if (user) {
             throw new Error('Username already exists!')
         }
     }
 
-    private static async checkEmailNotExists(email: string) {
+    private checkEmailNotExists = async (email: string) => {
         let user = await User.findOne({email});
         if (user) {
             throw new Error('Email address already exists!')
         }
     }
 
-    private static async checkUsernameExists(username: string) {
+    private checkUsernameExists = async (username: string) => {
         let user = await User.findOne({username});
         if (!user) {
             throw new Error('Username not match!');
         }
     }
 
-    private static async checkValidPassword(_: any, {req}: any): Promise<any> {
+    private checkValidPassword = async (_: any, {req}: any): Promise<any> => {
         const {username, password} = req.body;
         const user = await User.findOne({username: username});
         if (user) {

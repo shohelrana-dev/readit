@@ -3,12 +3,13 @@ import {validationResult} from "express-validator";
 import PostsService from "../services/posts-service";
 
 class PostsController {
+    private postService = new PostsService();
 
-    public async getPosts(req: Request, res: Response): Promise<Response> {
+    public getPosts = async (req: Request, res: Response): Promise<Response> => {
         const currentPage = (req.query.page || 0) as number;
         const postsPerPage = (req.query.count || 8) as number;
         try {
-            const posts = await PostsService.getPosts(currentPage, postsPerPage, res.locals.currentUser);
+            const posts = await this.postService.getPosts(currentPage, postsPerPage, res.locals.currentUser);
 
             return res.json(posts);
         } catch (err) {
@@ -19,10 +20,10 @@ class PostsController {
         }
     }
 
-    public async getPost(req: Request, res: Response): Promise<Response> {
+    public getPost = async (req: Request, res: Response): Promise<Response> => {
         const {identifier, slug} = req.params;
         try {
-            const post = await PostsService.getPost({identifier, slug}, res.locals.currentUser);
+            const post = await this.postService.getPost({identifier, slug}, res.locals.currentUser);
 
             return res.json(post);
         } catch (err) {
@@ -33,7 +34,7 @@ class PostsController {
         }
     }
 
-    public async create(req: Request, res: Response): Promise<Response> {
+    public create = async (req: Request, res: Response): Promise<Response> => {
         //check errors
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -43,7 +44,7 @@ class PostsController {
         const {title, body, sub} = req.body;
 
         try {
-            const post = await PostsService.create({title, body, sub, currentUser: res.locals.currentUser});
+            const post = await this.postService.create({title, body, sub, currentUser: res.locals.currentUser});
 
             //return success response
             return res.status(201).json({
@@ -59,13 +60,13 @@ class PostsController {
         }
     }
 
-    public async commentOnPost(req: Request, res: Response): Promise<Response> {
+    public commentOnPost = async (req: Request, res: Response): Promise<Response> => {
         const {identifier, slug} = req.params;
         const {body} = req.body;
         const user = res.locals.currentUser;
 
         try {
-            const comment = await PostsService.commentOnPost({identifier, slug}, {body, user});
+            const comment = await this.postService.commentOnPost({identifier, slug}, {body, user});
 
             return res.json({
                 success: true,
@@ -80,10 +81,10 @@ class PostsController {
         }
     }
 
-    public async getPostComments(req: Request, res: Response): Promise<Response> {
+    public getPostComments = async (req: Request, res: Response): Promise<Response> => {
         const {identifier, slug} = req.params
         try {
-            const comments = await PostsService.getPostComments(identifier, slug, res.locals.currentUser);
+            const comments = await this.postService.getPostComments(identifier, slug, res.locals.currentUser);
 
             return res.json(comments)
         } catch (err) {
